@@ -15,12 +15,20 @@ import java.util.List;
 public class NoteActivity extends AppCompatActivity {
 
     public static final String NOTE_POSITION = "com.kevinjanvier.notekeeper.NOTE_POSITION";
+    public static final String ORIGINAL_NOTE_COURSE_ID="com.kevinjanvier.notekeeper.COURSE_ID";
+    public static final String ORIGINAL_NOTE_TITLE="com.kevinjanvier.notekeeper.NOTE_TITLE";
+    public static final String ORIGINAL_NOTE_TEXT="com.kevinjanvier.notekeeper.NOTE_TEXT";
     public static final int POSTION_NOT_SET = -1;
     private NoteInfo mNote;
     private boolean isNewNote;
     private Spinner spinnerCourses;
     private EditText textNoteTitle;
     private EditText textNoteText;
+    private int mNotePosition;
+    private boolean isCanceling;
+    private String mOriginalNoteCourseId;
+    private String mOriginNoteTitle;
+    private String mOriginNoteText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,12 @@ public class NoteActivity extends AppCompatActivity {
         spinnerCourses.setAdapter(adapterCourses);
 
         readDisplayValues();
+        if (savedInstanceState== null){
+            savenewOriginNoeValues();
+
+        }else {
+            restoreOriginalNoteValues(savedInstanceState);
+        }
 
 
         textNoteTitle = findViewById(R.id.text_note_text);
@@ -49,6 +63,68 @@ public class NoteActivity extends AppCompatActivity {
 
 
 
+
+
+    }
+
+    private void restoreOriginalNoteValues(Bundle savedInstanceState) {
+        mOriginalNoteCourseId = savedInstanceState.getString(ORIGINAL_NOTE_COURSE_ID);
+        mOriginNoteText = savedInstanceState.getString(ORIGINAL_NOTE_TEXT);
+        mOriginNoteTitle = savedInstanceState.getString(ORIGINAL_NOTE_TITLE);
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ORIGINAL_NOTE_COURSE_ID, mOriginalNoteCourseId);
+        outState.putString(ORIGINAL_NOTE_TITLE, mOriginNoteTitle);
+        outState.putString(ORIGINAL_NOTE_TEXT, mOriginNoteText);
+    }
+
+    private void savenewOriginNoeValues() {
+        if (isNewNote)
+            return;
+
+        mOriginalNoteCourseId = mNote.getCourse().getCourseId();
+        mOriginNoteTitle = mNote.getTitle();
+        mOriginNoteText = mNote.getText();
+
+
+
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (isCanceling){
+            if (isNewNote){
+                DataManager.getInstance().removeNote(mNotePosition);
+            }else {
+                storePreviousNoteValues();
+            }
+        }else {
+            saveNote();
+        }
+    }
+
+    private void storePreviousNoteValues() {
+        CourseInfo course = DataManager.getInstance().getCourse(mOriginalNoteCourseId);
+        mNote.setCourse(course);
+        mNote.setTitle(mOriginNoteTitle);
+        mNote.setText(mOriginNoteText);
+    }
+
+    /**
+     * Save notes
+     */
+    private void saveNote() {
+
+        mNote.setCourse((CourseInfo)spinnerCourses.getSelectedItem());
+        mNote.setTitle(textNoteTitle.getText().toString());
+        mNote.setText(textNoteText.getText().toString());
     }
 
     private void displayNote(Spinner spinnerCourses, EditText textNoteTitle, EditText textNoteText) {
@@ -69,8 +145,21 @@ public class NoteActivity extends AppCompatActivity {
 
 //        isNewNote = mNote == null;
         isNewNote = position == POSTION_NOT_SET;
-        if (!isNewNote)
+        if (isNewNote){
+            createNewNote();
+        }else {
             mNote = DataManager.getInstance().getNotes().get(position);
+        }
+    }
+
+    /**
+     * Create new Notes
+     */
+    private void createNewNote() {
+        DataManager dm = DataManager.getInstance();
+        mNotePosition = dm.createNewNote();
+        mNote = dm.getNotes().get(mNotePosition);
+
 
     }
 
@@ -93,6 +182,9 @@ public class NoteActivity extends AppCompatActivity {
 
             sendEmail();
             return true;
+        }else if (id == R.id.cancel){
+            isCanceling = true;
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
