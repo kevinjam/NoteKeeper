@@ -47,6 +47,9 @@ before_install:
 - ./gradlew dependencies || true # DON'T ADD unless you are getting "Install missing components using SDK manager"
 #Source: https://medium.com/@oldergod/constraint-layout-and-circleci-travis-d50342696d2
 
+
+# Emulator Management: Create, Start and Wait
+#Warning: At the moment, these steps are not fully supported by Travis CI Android builder.
 before_script:
 - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
 - emulator -avd test -no-skin -no-audio -no-window &
