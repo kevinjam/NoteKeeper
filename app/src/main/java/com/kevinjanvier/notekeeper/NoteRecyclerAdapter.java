@@ -1,6 +1,7 @@
 package com.kevinjanvier.notekeeper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,16 +27,17 @@ public class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View itemView= mlayoutInflater.inflate(R.layout.item_note_list, parent, false);
+        View itemView = mlayoutInflater.inflate(R.layout.item_note_list, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-NoteInfo note = mNotes.get(i);
+        NoteInfo note = mNotes.get(position);
         holder.mtextCourse.setText(note.getCourse().getTitle());
         holder.mTextTitle.setText(note.getTitle());
+        holder.mCurrentPositiion = position;
     }
 
     @Override
@@ -43,15 +45,25 @@ NoteInfo note = mNotes.get(i);
         return mNotes.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView mtextCourse;
         public final TextView mTextTitle;
+        public int mCurrentPositiion;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mtextCourse = (TextView) itemView.findViewById(R.id.text_course);
             mTextTitle = (TextView) itemView.findViewById(R.id.text_title);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, NoteActivity.class);
+                    intent.putExtra(NoteActivity.NOTE_POSITION, mCurrentPositiion);
+                    mContext.startActivity(intent);
+                }
+            });
 
         }
     }

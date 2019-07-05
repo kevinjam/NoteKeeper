@@ -17,6 +17,7 @@ import java.util.List;
 import static com.kevinjanvier.notekeeper.NoteActivity.NOTE_POSITION;
 
 public class NoteListActivity extends AppCompatActivity {
+    private NoteRecyclerAdapter mNoteRecyclerAdapter;
 
 //    private ArrayAdapter<NoteInfo> madapterNotes;
 
@@ -61,14 +62,14 @@ public class NoteListActivity extends AppCompatActivity {
         final LinearLayoutManager notesLayoutManager = new LinearLayoutManager(this);
         recyclerNotes.setLayoutManager(notesLayoutManager);
         List<NoteInfo> notes = DataManager.getInstance().getNotes();
-        final NoteRecyclerAdapter noteRecyclerAdapter = new NoteRecyclerAdapter(this,notes);
-        recyclerNotes.setAdapter(noteRecyclerAdapter);
+        mNoteRecyclerAdapter = new NoteRecyclerAdapter(this,notes);
+        recyclerNotes.setAdapter(mNoteRecyclerAdapter);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-      //  madapterNotes.notifyDataSetChanged();
+        mNoteRecyclerAdapter.notifyDataSetChanged();
     }
 }
