@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
 
 public class NoteKeeperOpenHelper extends SQLiteOpenHelper {
 
@@ -12,7 +11,7 @@ public class NoteKeeperOpenHelper extends SQLiteOpenHelper {
     private static final Integer DATABASE_VERSION = 1;
 
 
-    public NoteKeeperOpenHelper(@Nullable Context context) {
+    public NoteKeeperOpenHelper( Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -22,6 +21,9 @@ public class NoteKeeperOpenHelper extends SQLiteOpenHelper {
         db.execSQL(NoteKeeperDatabaseContract.CourseInfoEntry.SQL_CREATE_TABLE);
         db.execSQL(NoteKeeperDatabaseContract.NoteInfoEntry.SQL_CREATE_TABLE);
 
+        DatabaseDataWorker worker= new DatabaseDataWorker(db);
+        worker.insertCourses();
+        worker.insertSampleNotes();
     }
 
     @Override
