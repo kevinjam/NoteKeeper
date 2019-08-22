@@ -1,5 +1,6 @@
 package com.kevinjanvier.notekeeper;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -183,9 +184,18 @@ public class NoteActivity extends AppCompatActivity {
             finish();
         } else if (id == R.id.action_next) {
             moveNext();
+        }else if (id== R.id.set_remider){
+            showReminderNotification();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showReminderNotification() {
+        String noteText =mTextNoteText.getText().toString();
+        String noteTitle =mTextNoteTitle.getText().toString();
+//        ContentUris.parseId(mNote)
+        NoteReminderNotification.notify(this, noteText, noteTitle, 0);
     }
 
 

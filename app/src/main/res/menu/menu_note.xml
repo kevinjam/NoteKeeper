@@ -20,5 +20,11 @@
         android:title="Send As Email"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/set_remider"
+        android:title="Set Remider"
+        app:showAsAction="never"/>
+
+
 
 </menu>
