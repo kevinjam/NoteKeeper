@@ -1,14 +1,19 @@
 package com.kevinjanvier.notekeeper;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import java.util.List;
@@ -153,10 +158,39 @@ public class NoteActivity extends AppCompatActivity {
      * Create new Notes
      */
     private void createNewNote() {
+//        AsyncTask<ContentValues, Void, Uri> task = new AsyncTask<ContentValues, Void, Uri>() {
+//            private ProgressBar progressBar;
+//            @Override
+//            protected Uri doInBackground(ContentValues... params) {
+//                ContentValues insertvalues = params[0];
+//                Uri uri =getContentResolver().insert(Note.CONTENT_URI, insertvalues);
+//
+//                progressBar.setProgress(2);
+//
+//
+//
+//
+//                return uri;
+//
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Uri uri) {
+//                mNoteUri = uri;
+//            }
+//
+//            @Override
+//            protected void onPreExecute() {
+//                progressBar = findViewById(R.id.progressBar);
+//                progressBar.setVisibility(View.VISIBLE);
+//                progressBar.setProgress(1);
+//            }
+//        };
+ContentValues values = new ContentValues();
         DataManager dm = DataManager.getInstance();
         mNotePosition = dm.createNewNote();
         mNote = dm.getNotes().get(mNotePosition);
-
+//task.execute(values);
 
     }
 
