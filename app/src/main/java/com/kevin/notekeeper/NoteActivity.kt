@@ -73,7 +73,12 @@ val noteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
                     showMessage(message)
                 } else {
                     moveNext()
+
                 }
+             true
+            }
+            R.id.action_get_together ->{
+                noteGetTogetherHelper.sendMessage(DataManager.loadNote(notePosition))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -110,6 +115,8 @@ val noteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
 
         return super.onPrepareOptionsMenu(menu)
     }
+
+
 
     override fun onPause() {
         super.onPause()
