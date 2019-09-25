@@ -1,13 +1,1 @@
-<resources>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
-    <style name="AddFab" parent="@style/Widget.Design.FloatingActionButton">
-        <item name="srcCompat">@drawable/ic_add_circle_black_24dp</item>
-        <item name="android:tint">@android:color/white</item>
-    </style>
-</resources>
+<resources></resources>
